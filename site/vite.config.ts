@@ -13,8 +13,11 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        manualChunks: {
-          three: ['three', '@react-three/fiber', '@react-three/drei'],
+        // Keep the 3D stack in its own chunk so the rest of the page is not
+        // held up behind it.
+        manualChunks(id: string) {
+          if (/node_modules\/(three|@react-three)/.test(id)) return 'three'
+          return undefined
         },
       },
     },

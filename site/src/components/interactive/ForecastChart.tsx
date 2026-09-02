@@ -635,7 +635,7 @@ export function ForecastChart() {
   })
   const [smoothing, setSmoothing] = useState<Smoothing>(DEFAULT_SMOOTHING)
 
-  const series = useMemo(buildDemand, [])
+  const series = useMemo(() => buildDemand(), [])
   const train = useMemo(() => series.slice(0, ORIGIN), [series])
   const holdout = useMemo(() => series.slice(ORIGIN), [series])
 

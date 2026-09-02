@@ -606,7 +606,7 @@ export function R2RChart() {
 
   const [degree, setDegree] = useState(DEFAULT_DEGREE)
 
-  const truth = useMemo(simulate, [])
+  const truth = useMemo(() => simulate(), [])
   /* The physics fit is a 1 890-point parameter scan, so it is kept out of the
      degree slider's memo and computed exactly once. */
   const physics = useMemo(() => fitPhysics(truth), [truth])

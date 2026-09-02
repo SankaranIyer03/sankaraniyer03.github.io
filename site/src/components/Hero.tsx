@@ -1,9 +1,14 @@
+import { lazy, Suspense } from 'react'
 import { motion } from 'motion/react'
-import { LoopScene } from './hero/LoopScene'
 import { profile } from '../content/profile'
 import { acts } from '../content/acts'
 import { easePrecise, riseIn, staggerParent, usePrefersReducedMotion } from '../lib/motion'
 import { scrollTo } from '../lib/useSmoothScroll'
+import { StaticLoop } from './hero/StaticLoop'
+
+/* The 3D stack is ~330 kB gzipped. Defer it so the headline paints immediately,
+   with the static SVG loop standing in until it arrives. */
+const LoopScene = lazy(() => import('./hero/LoopScene').then((m) => ({ default: m.LoopScene })))
 
 const headlineLines = [profile.headline.lead, ...profile.headline.beats]
 
@@ -100,7 +105,9 @@ export function Hero() {
           transition={{ duration: 1.4, ease: easePrecise, delay: 0.2 }}
         >
           <div className="relative mx-auto aspect-square w-full max-w-[640px]">
-            <LoopScene />
+            <Suspense fallback={<StaticLoop />}>
+              <LoopScene />
+            </Suspense>
           </div>
 
           <div className="mx-auto mt-6 max-w-[430px] px-4 text-center">
