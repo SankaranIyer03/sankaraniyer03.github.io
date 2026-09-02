@@ -6,7 +6,7 @@
 
 export const profile = {
   name: 'Sankaran Iyer',
-  role: 'Manufacturing Systems Engineer',
+  role: 'Manufacturing Systems & Operations Engineer',
   tagline: 'I take products from CAD to shop floor to closed loop.',
 
   headline: {
@@ -14,8 +14,24 @@ export const profile = {
     beats: ['Make it.', 'Automate it.', 'Prove it.'],
   },
 
+  /** The one sentence to read if you read nothing else. */
   standfirst:
-    'Mechanical engineer working across the full life of a product — design and industrialization, process control and automation, and the operations data that feeds back into the next revision.',
+    'I work on manufacturing systems, processes and operations — and build the digital tools that connect the shop floor to the supply chain and the business case.',
+
+  /**
+   * Four facts that establish scale and seniority before anyone scrolls.
+   * Every one is verifiable from the experience section below.
+   */
+  proof: [
+    { value: '$10MM', label: 'Smart-plant proposals led', context: 'Rockwell Automation' },
+    { value: '75%', label: 'Fewer non-conforming line items', context: 'GE Aerospace' },
+    { value: '139', label: 'Sites scaled to', context: 'Deloitte' },
+    { value: '12', label: 'Engineers led', context: 'John Deere program' },
+  ],
+
+  /** Used for the portrait; shot on a real factory floor, not a studio. */
+  portrait: 'profile/headshot',
+  floorPhoto: 'profile/factory-floor',
 
   thesis: {
     kicker: 'The thesis',

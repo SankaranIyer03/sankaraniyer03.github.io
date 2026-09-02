@@ -34,7 +34,7 @@ export function Timeline() {
     <section id="experience" className="border-b border-line">
       <div className="mx-auto max-w-[1600px] px-6 py-24 md:px-10 md:py-32">
         <SectionHead
-          index="03"
+          index="04"
           kicker="Experience"
           title="Six organisations, one thread."
           lede="Aerospace manufacturing, industrial automation consulting, and a valve shop floor I first walked as a high-school intern. Filter by stage to see how the loop shows up in the work history."

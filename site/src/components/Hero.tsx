@@ -1,49 +1,49 @@
-import { lazy, Suspense } from 'react'
 import { motion } from 'motion/react'
+import { Link } from 'react-router-dom'
 import { profile } from '../content/profile'
 import { acts } from '../content/acts'
+import { Figure } from './primitives/Figure'
 import { easePrecise, riseIn, staggerParent, usePrefersReducedMotion } from '../lib/motion'
 import { scrollTo } from '../lib/useSmoothScroll'
-import { StaticLoop } from './hero/StaticLoop'
-
-/* The 3D stack is ~330 kB gzipped. Defer it so the headline paints immediately,
-   with the static SVG loop standing in until it arrives. */
-const LoopScene = lazy(() => import('./hero/LoopScene').then((m) => ({ default: m.LoopScene })))
 
 const headlineLines = [profile.headline.lead, ...profile.headline.beats]
 
+/**
+ * First screen. The job is to answer "who is this and are they credible"
+ * before anyone decides to scroll — so the positioning sentence and a real
+ * photograph outrank anything decorative. The 3D loop waits for section 01.
+ */
 export function Hero() {
   const reduced = usePrefersReducedMotion()
 
   return (
     <section id="top" className="relative overflow-hidden border-b border-line">
-      {/* Blueprint substrate, faded out toward the edges */}
-      <div className="bp-grid bp-mask pointer-events-none absolute inset-0 opacity-70" />
+      <div className="bp-grid bp-mask pointer-events-none absolute inset-0 opacity-60" />
 
-      <div className="relative mx-auto grid max-w-[1600px] grid-cols-1 items-center gap-8 px-6 pt-28 pb-16 md:px-10 lg:min-h-[92vh] lg:grid-cols-12 lg:gap-4 lg:pt-32 lg:pb-24">
+      <div className="relative mx-auto grid max-w-[1600px] grid-cols-1 items-center gap-12 px-6 pt-28 pb-16 md:px-10 lg:min-h-[88vh] lg:grid-cols-12 lg:gap-12 lg:pt-32 lg:pb-20">
         {/* ---------------- Identity ---------------- */}
         <motion.div
-          className="lg:col-span-7 xl:col-span-6"
+          className="lg:col-span-7"
           variants={staggerParent}
           initial="hidden"
           animate="show"
         >
-          <motion.div variants={riseIn} className="flex items-center gap-3">
+          <motion.div variants={riseIn} className="flex flex-wrap items-center gap-x-3 gap-y-2">
             <span className="label">{profile.name}</span>
             <span className="h-px w-8 bg-line-strong" />
             <span className="label label-signal">{profile.role}</span>
           </motion.div>
 
-          <h1 className="mt-7 text-[clamp(2.6rem,7.2vw,5.6rem)] leading-[0.95] font-medium tracking-[-0.035em]">
+          <h1 className="mt-7 text-[clamp(2.4rem,6vw,4.6rem)] leading-[0.98] font-medium tracking-[-0.035em]">
             {headlineLines.map((line, i) => (
               <motion.span
                 key={line}
                 className="block"
-                initial={reduced ? { opacity: 1 } : { opacity: 0, y: 28, filter: 'blur(10px)' }}
+                initial={reduced ? { opacity: 1 } : { opacity: 0, y: 26, filter: 'blur(10px)' }}
                 animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                transition={{ duration: 0.9, delay: 0.15 + i * 0.13, ease: easePrecise }}
+                transition={{ duration: 0.85, delay: 0.12 + i * 0.11, ease: easePrecise }}
               >
-                <span className="mr-3 align-super font-mono text-[0.28em] font-medium tracking-normal text-ink-faint tnum">
+                <span className="mr-3 align-super font-mono text-[0.26em] font-medium tracking-normal text-ink-faint tnum">
                   {acts[i].code}
                 </span>
                 {line}
@@ -51,23 +51,14 @@ export function Hero() {
             ))}
           </h1>
 
-          <motion.div
-            variants={riseIn}
-            className="mt-9 max-w-xl border-l border-signal pl-5"
-          >
-            <p className="text-lg leading-relaxed text-ink-soft md:text-xl">
-              {profile.tagline}
-            </p>
-          </motion.div>
-
+          {/* The sentence that decides whether the rest gets read */}
           <motion.p
             variants={riseIn}
-            className="mt-6 max-w-xl text-[15px] leading-relaxed text-ink-muted"
+            className="mt-9 max-w-2xl border-l border-signal pl-5 text-[17px] leading-relaxed text-ink-soft md:text-[19px]"
           >
             {profile.standfirst}
           </motion.p>
 
-          {/* Education, stated plainly — it is a credential, not a headline */}
           <motion.dl variants={riseIn} className="mt-9 flex flex-wrap gap-x-10 gap-y-4">
             {profile.education.map((ed) => (
               <div key={ed.school}>
@@ -81,61 +72,44 @@ export function Hero() {
           <motion.div variants={riseIn} className="mt-10 flex flex-wrap items-center gap-3">
             <button
               type="button"
-              onClick={() => scrollTo('#thesis')}
-              className="group relative inline-flex items-center gap-3 border border-ink bg-ink px-6 py-3 text-sm font-medium text-paper transition-colors hover:bg-signal hover:border-signal"
+              onClick={() => scrollTo('#work')}
+              className="group inline-flex items-center gap-3 border border-ink bg-ink px-6 py-3 text-sm font-medium text-paper transition-colors hover:border-signal hover:bg-signal"
             >
-              Follow the loop
+              See the work
               <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
             </button>
-            <button
-              type="button"
-              onClick={() => scrollTo('#work')}
+            <Link
+              to="/work/rc-car-drivetrain"
               className="inline-flex items-center gap-3 border border-line-strong px-6 py-3 text-sm font-medium text-ink transition-colors hover:border-ink hover:bg-card"
             >
-              Selected work
-            </button>
+              Start with the flagship
+            </Link>
           </motion.div>
         </motion.div>
 
-        {/* ---------------- The loop ---------------- */}
-        <motion.div
-          className="relative lg:col-span-5 xl:col-span-6"
-          initial={reduced ? { opacity: 1 } : { opacity: 0, scale: 0.94 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1.4, ease: easePrecise, delay: 0.2 }}
+        {/* ---------------- Portrait ---------------- */}
+        <motion.figure
+          className="reg-marks relative lg:col-span-5"
+          initial={reduced ? { opacity: 1 } : { opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.1, ease: easePrecise, delay: 0.3 }}
         >
-          <div className="relative mx-auto aspect-square w-full max-w-[640px]">
-            <Suspense fallback={<StaticLoop />}>
-              <LoopScene />
-            </Suspense>
+          <div className="border border-line bg-card p-2.5">
+            <Figure
+              media={profile.floorPhoto}
+              alt={`${profile.name} on a manufacturing floor`}
+              size="large"
+              priority
+              className="aspect-4/5 w-full"
+              sizes="(max-width: 1024px) 100vw, 40vw"
+            />
           </div>
-
-          <div className="mx-auto mt-6 max-w-[430px] px-4 text-center">
-            <p className="label">Fig. 01 — the closed loop</p>
-            <p className="mt-2 text-[13px] leading-relaxed text-ink-muted">
-              {profile.thesis.loopStatement}
-            </p>
-          </div>
-        </motion.div>
+          <figcaption className="mt-3 flex items-baseline justify-between gap-4">
+            <span className="label">Fig. 00 — {profile.name}, on the floor</span>
+            <span className="label">Boston, MA</span>
+          </figcaption>
+        </motion.figure>
       </div>
-
-      {/* Scroll cue */}
-      <motion.div
-        className="relative mx-auto flex max-w-[1600px] items-center gap-4 px-6 pb-8 md:px-10"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.4, duration: 0.8 }}
-      >
-        <span className="label">Scroll</span>
-        <span className="h-px flex-1 bg-line" />
-        <motion.span
-          className="font-mono text-xs text-ink-faint"
-          animate={reduced ? {} : { y: [0, 4, 0] }}
-          transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
-        >
-          ↓
-        </motion.span>
-      </motion.div>
     </section>
   )
 }

@@ -3,3 +3,8 @@ dist/
 .DS_Store
 *.local
 .vite/
+
+# Source media library (~1.4GB). Optimised derivatives are generated into
+# site/public/ by `npm run media` and those are what get committed.
+# Several source files also exceed GitHub's 100MB per-file limit.
+/Portfolio Projects/

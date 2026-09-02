@@ -13,7 +13,7 @@ export function Toolbox() {
     <section id="toolbox" className="border-b border-line">
       <div className="mx-auto max-w-[1600px] px-6 py-24 md:px-10 md:py-32">
         <SectionHead
-          index="05"
+          index="06"
           kicker="Toolbox"
           title="Capabilities, grouped by where they sit in the loop."
           lede="Listed by what they let me do rather than by percentage proficiency — every one of these has been used on something in the portfolio above."

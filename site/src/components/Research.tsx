@@ -9,7 +9,7 @@ export function Research() {
     <section id="research" className="border-b border-line bg-paper-deep/40">
       <div className="mx-auto max-w-[1600px] px-6 py-24 md:px-10 md:py-32">
         <SectionHead
-          index="04"
+          index="05"
           kicker="Research & publications"
           title="Where the modelling gets rigorous."
           lede="Two papers: one published on interpretable hybrid machine learning for reaction kinetics, one in review on manufacturing standardization and throughput."

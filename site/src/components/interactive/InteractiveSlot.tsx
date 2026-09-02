@@ -1,10 +1,7 @@
 import { Component, lazy, Suspense, type ReactNode } from 'react'
 import type { InteractiveId } from '../../content/projects'
-import { ModelViewer } from '../primitives/ModelViewer'
 
-const SPCChart = lazy(() =>
-  import('./SPCChart').then((m) => ({ default: m.SPCChart })),
-)
+const SPCChart = lazy(() => import('./SPCChart').then((m) => ({ default: m.SPCChart })))
 const LineSim = lazy(() => import('./LineSim').then((m) => ({ default: m.LineSim })))
 const VisionOverlay = lazy(() =>
   import('./VisionOverlay').then((m) => ({ default: m.VisionOverlay })),
@@ -49,7 +46,7 @@ function Loading() {
   )
 }
 
-const widgets: Partial<Record<InteractiveId, () => ReactNode>> = {
+const widgets: Record<InteractiveId, () => ReactNode> = {
   'spc-chart': () => <SPCChart />,
   'line-sim': () => <LineSim />,
   'vision-overlay': () => <VisionOverlay />,
@@ -58,24 +55,7 @@ const widgets: Partial<Record<InteractiveId, () => ReactNode>> = {
   'r2r-chart': () => <R2RChart />,
 }
 
-interface InteractiveSlotProps {
-  id: InteractiveId
-  /** Passed through when the slot is a 3D model view. */
-  modelSrc?: string
-  modelLabel?: string
-  modelCaption?: string
-}
-
-export function InteractiveSlot({
-  id,
-  modelSrc,
-  modelLabel = 'CAD model',
-  modelCaption,
-}: InteractiveSlotProps) {
-  if (id === 'model-viewer') {
-    return <ModelViewer src={modelSrc} label={modelLabel} caption={modelCaption} />
-  }
-
+export function InteractiveSlot({ id }: { id: InteractiveId }) {
   const render = widgets[id]
   if (!render) return null
 
