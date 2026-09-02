@@ -185,9 +185,12 @@ export const projects: Project[] = [
         caption: 'The integrated car the class converged on.',
       },
       {
+        // Source file is R5_Base_Print.glb and measures 22.4 x 5.0 x 0.6 — a
+        // flat printed plate, not the bored axle holder. Labelled for what it
+        // actually is until Sankaran confirms the part.
         src: '/models/rc-car-axle-holder.glb',
-        label: 'Axle holder',
-        caption: 'The FDM part whose bore diameter drove the whole quality investigation.',
+        label: 'Printed base plate',
+        caption: 'One of the FDM-printed components from the production run.',
       },
     ],
 

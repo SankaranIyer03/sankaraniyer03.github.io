@@ -221,7 +221,8 @@ const models = [
   ['RC Car/R4_Assembly v21.glb', 'rc-car-assembly.glb'],
   ['RC Car/Wheels and Drivetrain v4.glb', 'rc-car-drivetrain.glb'],
   ['RC Car/R5_Base_Print.glb', 'rc-car-axle-holder.glb'],
-  ['RC Car/14DD661A.glb', 'rc-car-part.glb'],
+  // 14DD661A.glb is skipped: different bytes, but the same 55-node / 18,988
+  // triangle model as R4_Assembly, so it renders identically.
 ]
 
 const docs = [
