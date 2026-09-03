@@ -8,16 +8,18 @@ export interface VideoProps {
   /** Key into the generated video manifest, e.g. "terraprobe/sampling". */
   media: string
   /**
-   * `loop` — short muted clip that plays itself while on screen (a GIF, done properly).
-   * `player` — full demo; nothing is downloaded until the play control is pressed.
+   * `loop`, short muted clip that plays itself while on screen (a GIF, done properly).
+   * `player`, full demo; nothing is downloaded until the play control is pressed.
    */
   mode?: 'loop' | 'player'
   /** Accessible name for the clip, and the basis of the play control's label. */
   label: string
   caption?: string
   className?: string
-  /** Load the poster eagerly — only for clips above the fold. */
+  /** Load the poster eagerly, only for clips above the fold. */
   priority?: boolean
+  /** Fill a parent of known height instead of using the source aspect. */
+  fill?: boolean
 }
 
 /** Seconds → `m:ss` (or `h:mm:ss` for anything over an hour). */
@@ -98,6 +100,7 @@ export function Video({
   caption,
   className = '',
   priority = false,
+  fill = false,
 }: VideoProps) {
   const entry = getVideo(media)
   const reduced = usePrefersReducedMotion()
@@ -164,10 +167,10 @@ export function Video({
         <div
           className="bp-grid grid aspect-16/10 place-items-center px-6 text-center"
           role="img"
-          aria-label={`${label} — video unavailable`}
+          aria-label={`${label}, video unavailable`}
         >
           <div>
-            <p className="label">Video slot — {label}</p>
+            <p className="label">Video slot, {label}</p>
             <p className="mt-2 font-mono text-[11px] text-ink-faint">missing · {media}</p>
           </div>
         </div>
@@ -178,19 +181,24 @@ export function Video({
 
   const aspect = entry.aspect && entry.aspect > 0 ? entry.aspect : 16 / 9
   const portrait = aspect < 1
-  // Portrait clips keep their real shape; cap the column so they don't tower.
-  const widthGuard = portrait && !/\bmax-w-/.test(className) ? 'mx-auto max-w-[22rem]' : ''
+  // Portrait clips keep their real shape unless they are filling a split.
+  const widthGuard =
+    !fill && portrait && !/\bmax-w-/.test(className) ? 'mx-auto max-w-[22rem]' : ''
   const durationText = entry.duration === null ? null : formatDuration(entry.duration)
   const fade = { duration: reduced ? 0 : 0.45, ease: easePrecise }
   /** Loops only wait behind the poster under reduced motion; players always do. */
   const awaitingGesture = !started && (isLoop ? reduced : true)
 
   return (
-    <figure className={`reg-marks relative border border-line bg-card ${widthGuard} ${className}`}>
+    <figure
+      className={`reg-marks relative border border-line bg-card ${widthGuard} ${
+        fill ? 'flex h-full flex-col' : ''
+      } ${className}`}
+    >
       <div
         ref={frameRef}
-        className="relative overflow-hidden bg-paper-deep"
-        style={{ aspectRatio: String(aspect) }}
+        className={`relative overflow-hidden bg-paper-deep ${fill ? 'min-h-0 flex-1' : ''}`}
+        style={fill ? undefined : { aspectRatio: String(aspect) }}
       >
         {isLoop ? (
           <video
@@ -203,7 +211,7 @@ export function Video({
             loop
             playsInline
             preload="metadata"
-            className="h-full w-full object-cover"
+            className={`h-full w-full ${fill ? 'object-contain' : 'object-cover'}`}
           />
         ) : (
           started && (
@@ -235,7 +243,7 @@ export function Video({
                 type="button"
                 onClick={() => setStarted(true)}
                 aria-label={
-                  durationText ? `Play ${label} — ${durationText}` : `Play ${label}`
+                  durationText ? `Play ${label}, ${durationText}` : `Play ${label}`
                 }
                 className="group absolute inset-0 grid place-items-center"
               >

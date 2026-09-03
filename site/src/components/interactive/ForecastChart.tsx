@@ -30,7 +30,7 @@ const SEED = 20240517
 /**
  * A synthetic service-parts demand series: linear growth on top of an annual
  * cycle and a half-year harmonic, with occasional quiet months. The
- * intermittency is the part that makes real aftermarket parts demand awkward —
+ * intermittency is the part that makes real aftermarket parts demand awkward , 
  * a textbook seasonal series would flatter every model here.
  */
 function buildDemand(): number[] {
@@ -107,7 +107,7 @@ function holtWinters(train: number[], p: Smoothing, horizon: number): number[] {
  * AR(2) on the first difference, fitted by least squares (ridge with a
  * vanishing penalty is exactly OLS on the normal equations), then iterated
  * forward and re-accumulated to levels. Differencing strips the trend but not
- * the annual cycle, so this one is expected to struggle — that is the point of
+ * the annual cycle, so this one is expected to struggle, that is the point of
  * keeping it in the comparison.
  */
 function arTwo(train: number[], horizon: number): number[] {
@@ -154,7 +154,7 @@ function lagRow(history: number[], t: number, z: (v: number) => number): number[
 /**
  * A lag-feature regression standing in for the gradient-boosting baseline used
  * on the freight work. It is a ridge fit on engineered lag features, not
- * LightGBM — same feature-engineering idea, honest about the estimator.
+ * LightGBM, same feature-engineering idea, honest about the estimator.
  * Forecasts are generated recursively, feeding predictions back in as lags.
  */
 function lagRegression(train: number[], horizon: number): number[] {
@@ -245,7 +245,7 @@ const VALIDATION_FOLDS = 2
 /**
  * Grid-searches α, β and γ by rolling-origin cross-validation *inside* the
  * training data: successive twelve-month folds, each scored by a model fitted
- * only on what came before it. Averaging folds matters — tuning against a
+ * only on what came before it. Averaging folds matters, tuning against a
  * single fold picks parameters that suit one particular year and generalise
  * worse than the defaults. The holdout is never touched, so the error reported
  * above stays a genuine out-of-sample number rather than a tuned one.
@@ -493,7 +493,7 @@ function DemandChart({ series, results, transition, ariaLabel }: ChartProps) {
           HOLDOUT · {HOLDOUT} MO
         </text>
 
-        {/* Actual demand — always ink */}
+        {/* Actual demand, always ink */}
         <path
           d={actualPath}
           fill="none"
@@ -612,7 +612,7 @@ const SLIDERS: readonly SliderSpec[] = [
     symbol: 'β',
     label: 'Trend',
     spoken: 'beta, trend smoothing',
-    hint: 'How readily the slope is revised — high β overshoots',
+    hint: 'How readily the slope is revised, high β overshoots',
   },
   {
     key: 'gamma',
@@ -718,13 +718,13 @@ export function ForecastChart() {
       <header className="bp-grid border-b border-line px-4 py-4 sm:px-6 sm:py-5">
         <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-3">
           <div className="min-w-0">
-            <p className="label">Fig. 05 — Forecast bake-off</p>
+            <p className="label">Fig. 05, Forecast bake-off</p>
             <h2 className="mt-1.5 text-lg leading-tight text-ink sm:text-xl">
               Service-parts demand, twelve-month horizon
             </h2>
             <p className="mt-1 max-w-xl text-sm leading-relaxed text-ink-muted">
               Four forecasters, one held-out year, scored the way the Deere program scored
-              them — on error <em>and</em> on which direction they miss. Turn models on and
+              them, on error <em>and</em> on which direction they miss. Turn models on and
               off; move the smoothing constants and watch the error answer.
             </p>
           </div>
@@ -732,7 +732,7 @@ export function ForecastChart() {
             <div>
               <dt className="label">Best RMSE</dt>
               <dd className="font-mono tnum text-3xl leading-none text-ink">
-                {best ? best.rmse.toFixed(1) : '—'}
+                {best ? best.rmse.toFixed(1) : '–'}
               </dd>
             </div>
             <div className="max-w-[9rem]">
@@ -789,7 +789,7 @@ export function ForecastChart() {
             <div aria-live="polite">
               {shown.length === 0 ? (
                 <p className="py-6 text-center text-sm text-ink-faint">
-                  No models selected — enable one to score it.
+                  No models selected, enable one to score it.
                 </p>
               ) : (
                 <table className="w-full border-collapse text-left">
@@ -882,7 +882,7 @@ export function ForecastChart() {
               <strong className="font-medium text-ink-soft">over-predicts</strong> and the
               parts sit on a shelf; negative means it under-predicts and a machine waits. A
               model can win on RMSE and still be the wrong answer if it misses in the
-              expensive direction — which is exactly the argument the engineering, business
+              expensive direction, which is exactly the argument the engineering, business
               and data science students on that team kept having.
             </p>
           </Panel>
@@ -964,7 +964,7 @@ export function ForecastChart() {
                       max={1}
                       step={0.01}
                       value={value}
-                      aria-valuetext={`${value.toFixed(2)} — ${s.spoken}`}
+                      aria-valuetext={`${value.toFixed(2)}, ${s.spoken}`}
                       aria-describedby={`${id}-hint`}
                       onChange={(ev) => setSmoothingValue(s.key, Number(ev.target.value))}
                       className={RANGE_CLASS}
@@ -1014,16 +1014,16 @@ export function ForecastChart() {
           <strong className="font-medium text-ink-soft">
             synthetic data generated in the browser
           </strong>{' '}
-          from a seeded pseudo-random generator — trend, annual seasonality, intermittent
+          from a seeded pseudo-random generator, trend, annual seasonality, intermittent
           quiet months and noise. It is{' '}
           <strong className="font-medium text-ink-soft">
             not John Deere data, customer data, or freight data
           </strong>
-          , and no figure on this page is a result from either engagement. What is real is
+, and no figure on this page is a result from either engagement. What is real is
           the method: the train/holdout discipline, the forecasters, and the error measures
           are the ones those projects used. The fourth model is a{' '}
           <strong className="font-medium text-ink-soft">lag-feature ridge regression</strong>{' '}
-          standing in for the gradient-boosting baseline from the freight comparison — same
+          standing in for the gradient-boosting baseline from the freight comparison, same
           feature-engineering idea, a simpler estimator, and labelled as such rather than
           dressed up as LightGBM.
         </p>

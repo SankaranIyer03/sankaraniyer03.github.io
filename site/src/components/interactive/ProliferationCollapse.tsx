@@ -149,7 +149,7 @@ interface Metric {
   unit?: string
 }
 
-/** Illustrative figures — see the caption. */
+/** Illustrative figures, see the caption. */
 const METRICS: readonly Metric[] = [
   { key: 'configs', label: 'Configurations offered', before: 248, after: 248 },
   { key: 'parts', label: 'Unique part numbers', before: 1410, after: 386 },
@@ -480,7 +480,7 @@ export function ProliferationCollapse() {
           </h3>
           <p className="mt-3 text-sm leading-relaxed text-ink-soft sm:text-base">
             Every variant was justified on its own. Together they became the dominant cost
-            driver. The fix is not fewer customer options — it is a standard base that
+            driver. The fix is not fewer customer options, it is a standard base that
             carries the shared load, plus add-on modules that absorb the variation.
           </p>
         </div>
@@ -643,7 +643,7 @@ export function ProliferationCollapse() {
       </div>
 
       <p className="mt-3 max-w-3xl font-mono text-[0.6875rem] leading-relaxed text-ink-muted">
-        Figures are illustrative of the standardization approach — not GE Vernova
+        Figures are illustrative of the standardization approach, not GE Vernova
         proprietary data. Counts are chosen to show the shape of the trade, not to report
         a measured result.
       </p>

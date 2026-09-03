@@ -1,21 +1,29 @@
-import { useCallback, useEffect, useState } from 'react'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { motion } from 'motion/react'
+import { useEffect, useState } from 'react'
+import { Link, NavLink, useLocation } from 'react-router-dom'
+import { AnimatePresence, motion } from 'motion/react'
 import { profile } from '../content/profile'
-import { scrollTo } from '../lib/useSmoothScroll'
+import { easePrecise } from '../lib/motion'
 
 const items = [
-  { id: 'loop', label: 'How I work' },
-  { id: 'work', label: 'Work' },
-  { id: 'experience', label: 'Experience' },
-  { id: 'research', label: 'Research' },
+  { to: '/projects', label: 'Projects' },
+  { to: '/experience', label: 'Experience' },
+  { to: '/research', label: 'Research' },
 ]
 
+const linkClass = ({ isActive }: { isActive: boolean }) =>
+  `relative px-3 py-2 font-mono text-[11px] tracking-[0.12em] uppercase transition-colors ${
+    isActive ? 'text-ink' : 'text-ink-muted hover:text-ink'
+  }`
+
+/**
+ * Now a page-level nav rather than a scroll-spy, each destination is its own
+ * route, so active state comes from the router instead of an
+ * IntersectionObserver guessing which section is centred.
+ */
 export function Nav() {
   const [scrolled, setScrolled] = useState(false)
-  const [active, setActive] = useState<string>('')
+  const [menuOpen, setMenuOpen] = useState(false)
   const { pathname } = useLocation()
-  const navigate = useNavigate()
   const onHome = pathname === '/'
 
   useEffect(() => {
@@ -25,40 +33,15 @@ export function Nav() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  // Section tracking only means anything on the home page.
-  useEffect(() => {
-    if (!onHome) {
-      setActive('')
-      return
-    }
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) setActive(entry.target.id)
-        }
-      },
-      { rootMargin: '-45% 0px -50% 0px' },
-    )
-    for (const item of items) {
-      const el = document.getElementById(item.id)
-      if (el) observer.observe(el)
-    }
-    return () => observer.disconnect()
-  }, [onHome])
-
-  /** From a project page, jump home first and let Home honour the hash. */
-  const goToSection = useCallback(
-    (id: string) => {
-      if (onHome) scrollTo(`#${id}`)
-      else navigate(`/#${id}`)
-    },
-    [onHome, navigate],
-  )
+  // A route change while the mobile sheet is open should close it.
+  useEffect(() => setMenuOpen(false), [pathname])
 
   return (
     <motion.header
       className={`fixed inset-x-0 top-0 z-50 transition-colors duration-500 ${
-        scrolled || !onHome ? 'border-b border-line bg-paper/85 backdrop-blur-md' : ''
+        scrolled || !onHome || menuOpen
+          ? 'border-b border-line bg-paper/85 backdrop-blur-md'
+          : ''
       }`}
       initial={{ y: -24, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
@@ -72,25 +55,22 @@ export function Nav() {
           </span>
         </Link>
 
-        <div className="hidden items-center gap-1 md:flex">
+        <div className="hidden items-center gap-1 lg:flex">
           {items.map((item) => (
-            <button
-              key={item.id}
-              type="button"
-              onClick={() => goToSection(item.id)}
-              className={`relative px-3 py-2 font-mono text-[11px] tracking-[0.12em] uppercase transition-colors ${
-                active === item.id ? 'text-ink' : 'text-ink-muted hover:text-ink'
-              }`}
-            >
-              {item.label}
-              {active === item.id && (
-                <motion.span
-                  layoutId="nav-active"
-                  className="absolute inset-x-2 -bottom-px h-[2px] bg-signal"
-                  transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-                />
+            <NavLink key={item.to} to={item.to} className={linkClass}>
+              {({ isActive }) => (
+                <>
+                  {item.label}
+                  {isActive && (
+                    <motion.span
+                      layoutId="nav-active"
+                      className="absolute inset-x-2 -bottom-px h-[2px] bg-signal"
+                      transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                    />
+                  )}
+                </>
               )}
-            </button>
+            </NavLink>
           ))}
         </div>
 
@@ -103,15 +83,53 @@ export function Nav() {
           >
             LinkedIn
           </a>
-          <button
-            type="button"
-            onClick={() => goToSection('contact')}
+          <a
+            href={`mailto:${profile.links.email}`}
             className="border border-ink bg-ink px-4 py-2 font-mono text-[11px] tracking-[0.12em] text-paper uppercase transition-colors hover:border-signal hover:bg-signal"
           >
             Contact
+          </a>
+          <button
+            type="button"
+            onClick={() => setMenuOpen((v) => !v)}
+            aria-expanded={menuOpen}
+            aria-label="Toggle menu"
+            className="grid h-9 w-9 place-items-center border border-line-strong font-mono text-sm transition-colors hover:border-ink lg:hidden"
+          >
+            {menuOpen ? '×' : '≡'}
           </button>
         </div>
       </nav>
+
+      {/* ---------------- Mobile sheet ---------------- */}
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.35, ease: easePrecise }}
+            className="overflow-hidden border-t border-line lg:hidden"
+          >
+            <ul className="mx-auto max-w-[1600px] px-6 py-2 md:px-10">
+              {items.map((item) => (
+                <li key={item.to} className="border-b border-line last:border-b-0">
+                  <NavLink
+                    to={item.to}
+                    className={({ isActive }) =>
+                      `block py-4 font-mono text-[12px] tracking-[0.12em] uppercase transition-colors ${
+                        isActive ? 'text-signal' : 'text-ink-soft hover:text-ink'
+                      }`
+                    }
+                  >
+                    {item.label}
+                  </NavLink>
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.header>
   )
 }

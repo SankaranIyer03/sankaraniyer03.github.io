@@ -41,13 +41,17 @@ const videos = {}
 /* ------------------------------------------------------------------ */
 /* Images                                                              */
 /* ------------------------------------------------------------------ */
-async function convertImage(srcPath, target) {
-  const input = sharp(srcPath, { failOn: 'none' }).rotate() // honour EXIF orientation
+async function convertImage(srcPath, target, { trim = false, widths = WIDTHS } = {}) {
+  let input = sharp(srcPath, { failOn: 'none' }).rotate() // honour EXIF orientation
+  // Logos ship with wildly different amounts of built-in padding, which makes
+  // them impossible to align on a grid. Cropping to the ink lets the layout
+  // control the spacing instead.
+  if (trim) input = sharp(await input.trim().toBuffer())
   const meta = await input.metadata()
   await mkdir(join(IMG_OUT, dirname(target)), { recursive: true })
 
   const entry = {}
-  for (const [role, width] of Object.entries(WIDTHS)) {
+  for (const [role, width] of Object.entries(widths)) {
     const w = Math.min(width, meta.width ?? width)
     const base = `${target}-${role}`
     await input
@@ -58,9 +62,10 @@ async function convertImage(srcPath, target) {
     entry[role] = `/media/${base}.webp`
   }
 
+  const midWidth = widths.mid ?? WIDTHS.mid
   await input
     .clone()
-    .resize({ width: Math.min(WIDTHS.mid, meta.width ?? WIDTHS.mid), withoutEnlargement: true })
+    .resize({ width: Math.min(midWidth, meta.width ?? midWidth), withoutEnlargement: true })
     .avif({ quality: 58, effort: 4 })
     .toFile(join(IMG_OUT, `${target}-mid.avif`))
   entry.midAvif = `/media/${target}-mid.avif`
@@ -168,13 +173,38 @@ const LEGACY_RENAMES = new Map([
 
 const pad = (n) => String(n).padStart(2, '0')
 
+/**
+ * iPhone HEICs only decode through `sips`, and only when it runs outside a
+ * sandbox — libheif rejects the `heix` brand these files use. They are
+ * pre-converted to full-resolution JPEG siblings by:
+ *
+ *   find "Portfolio Projects" -iname '*.HEIC' ! -name '._*' \
+ *     -exec sh -c 'sips -s format jpeg -s formatOptions 95 "$1" \
+ *     --out "${1%.*}.jpg"' _ {} \;
+ *
+ * so this pipeline stays sharp-only.
+ */
 const projectImages = [
   // Profile & context — the real photographs that make the site credible
   ['Headshot.jpg', 'profile/headshot'],
   ['Walking_Factory_Floor.jpeg', 'profile/factory-floor'],
   ['GE_Standardization_Team.jpeg', 'ge-vernova/team'],
 
+  // Landing carousel, ordered as a career arc: shop floor -> digital thread
+  // -> FrED -> capstone -> automation.
+  ['Carousel Pictures/Walking_Factory_Floor.jpeg', 'carousel/01-floor'],
+  ['crude_MES_iPad_Picture.jpg', 'carousel/02-mes'],
+  ['Carousel Pictures/13451140-3648-42B1-B94C-D97B8F082A45_1_105_c.jpeg', 'carousel/03-fred-poster'],
+  ['Carousel Pictures/IMG_9314.jpg', 'carousel/04-fred-summit'],
+  ['Carousel Pictures/IMG_0553.jpg', 'carousel/05-capstone'],
+  ['Carousel Pictures/Sankaran_Rockwell.jpeg', 'carousel/06-rockwell'],
+
+  // The MES tablet in situ at station BC5 — the single best piece of evidence
+  // that the digital thread shipped to a real floor.
+  ['crude_MES_iPad_Picture.jpg', 'ge-vernova/mes-ipad'],
+
   // RC Car
+  ['RC Car/RC_Car_Pic.avif', 'rc-car/pic'],
   ['RC Car/Drivetrain_Photographic.png', 'rc-car/drivetrain'],
   ['RC Car/Axle_Holder.png', 'rc-car/axle-holder'],
   ['RC Car/AxleHolder_Diameter_NonConformance.jpeg', 'rc-car/nonconformance'],
@@ -183,7 +213,17 @@ const projectImages = [
   ['RC Car/RaspberryPi_CameraSetup_2.jpg', 'rc-car/vision-rig-2'],
   ['RC Car/Water_Jet.png', 'rc-car/waterjet'],
   ['RC Car/Floor_Simulation_3D_Model.jpeg', 'rc-car/anylogic-3d'],
+  ['RC Car/Simulation_Subassemblies.png', 'rc-car/sim-subassemblies'],
+  ['RC Car/Simulation_Interpretation.png', 'rc-car/sim-interpretation'],
+  ['RC Car/Simulation_results.png', 'rc-car/sim-results'],
   ['RC Car/Team.jpeg', 'rc-car/team'],
+  ['RC Car/SPC_PHOTO.png', 'rc-car/spc-batch'],
+  ['RC Car/SPC_Photo_Measurement.jpg', 'rc-car/spc-vision'],
+  ['RC Car/SPC_Parameters.png', 'rc-car/spc-parameters'],
+  ['RC Car/SPC_Problem_Definition.png', 'rc-car/spc-problem'],
+  ['RC Car/SPC_Process_Control_Charts.png', 'rc-car/spc-xbar'],
+  ['RC Car/SPC_Process_Values.png', 'rc-car/spc-distribution'],
+  ['RC Car/SPC_Design_Specification_Limits.png', 'rc-car/spc-spec'],
 
   // TerraProbe
   ['TerraProbe/TerraProbe Dashboard/TerraProbe_logo.png', 'terraprobe/logo'],
@@ -191,13 +231,40 @@ const projectImages = [
   // Offshore drone
   ['UAV Drone/Example_Drone_Turbine_Inspection.avif', 'offshore-drone/context'],
 
+  // Roll-to-roll — figures pulled from the 2.C51 analysis deck
+  ['Roll_to_Roll_Mfg_Analysis/Process_Line.png', 'r2r/process'],
+  ['Roll_to_Roll_Mfg_Analysis/Modeling_Methodology.png', 'r2r/methodology'],
+  ['Roll_to_Roll_Mfg_Analysis/Web_Position_EDA.png', 'r2r/web-position'],
+  ['Roll_to_Roll_Mfg_Analysis/Transport_Delays.png', 'r2r/delays'],
+  ['Roll_to_Roll_Mfg_Analysis/Physics_Model_Fit.png', 'r2r/model-fit'],
+  ['Roll_to_Roll_Mfg_Analysis/Film_On_Rollers.jpeg', 'r2r/film-rollers'],
+
+  // Truck freight — figures from the SCM.C51 EDA and modeling decks
+  ['Truck Freight Analysis/Market_Behavior.png', 'freight/market'],
+  ['Truck Freight Analysis/Seasonality.png', 'freight/seasonality'],
+  ['Truck Freight Analysis/LightGBM_Lanes.png', 'freight/lightgbm'],
+  ['Truck Freight Analysis/Model_Comparison.png', 'freight/comparison'],
+
   // Despite the .gif extension this is a single frame — a screenshot of the
   // AnyLogic model, not an animation.
   ['RC Car/AnyLogic_Model_GIF.gif', 'rc-car/anylogic-model'],
+]
 
-  // NOTE: crude_MES_iPad_Picture.HEIC is skipped — the file decodes to solid
-  // black in libheif, ffmpeg and sips, so it appears to be corrupt. Re-export
-  // it as JPEG from Photos and add it here as 'ge-vernova/mes-ipad'.
+/**
+ * High-resolution replacements for the tiny legacy logos (some were 89px
+ * wide). Trimmed to the ink and capped small, since they never render above
+ * ~160px. These deliberately reuse the legacy keys to overwrite them, which
+ * works because this phase runs after the legacy pass.
+ */
+const LOGO_WIDTHS = { small: 160, mid: 320 }
+
+const logos = [
+  ['MIT-Logo.png', 'logos/mit'],
+  ['purdue-logo.webp', 'logos/purdue'],
+  ['GE-Aerospace-Emblem.png', 'logos/ge-aerospace'],
+  ['GE-Vernova-Emblem.png', 'logos/ge-vernova'],
+  ['Rockwell.png', 'logos/rockwell'],
+  ['Deloitte.png', 'logos/deloitte'],
 ]
 
 const projectVideos = [
@@ -205,6 +272,7 @@ const projectVideos = [
   ['TerraProbe/Soil_Sampling_Demo.MOV', 'terraprobe/sampling', { maxHeight: 720, crf: 27 }],
   ['UAV Drone/IMG_9460.MOV', 'offshore-drone/clamp', { maxHeight: 720, crf: 27 }],
   ['UAV Drone/IMG_9462.gif', 'offshore-drone/platform-motion', { maxHeight: 711, crf: 28 }],
+  ['RC Car/AnyLogic_Sim_Loop.gif', 'rc-car/anylogic-loop', { maxHeight: 720, crf: 28 }],
   ['UAV Drone/VIDEO-2026-03-14-10-00-35.mp4', 'offshore-drone/test-1', { maxHeight: 478, crf: 28 }],
   ['UAV Drone/VIDEO-2026-03-14-10-00-41.mp4', 'offshore-drone/test-2', { maxHeight: 478, crf: 28 }],
 
@@ -227,16 +295,22 @@ const models = [
 
 const docs = [
   ['RC Car/RC_Car_Simulation_Modeling_Paper.pdf', 'rc-car-simulation-paper.pdf'],
-  [
-    'John Deere Time Series Analysis/John_Deere_Final_Presentation_Fall2024.pdf',
-    'john-deere-final-presentation.pdf',
-  ],
-  [
-    'John Deere Time Series Analysis/TDM2024_Point_Forecasting_Analysis.pdf',
-    'john-deere-point-forecasting.pdf',
-  ],
   ['ParkVue/parkVue_PitchDeck.pdf', 'parkvue-pitch-deck.pdf'],
+  [
+    'John Deere Time Series Analysis/TDM_Symposium2024_Poster_JohnDeere_PartsDemandForecasting.pdf',
+    'john-deere-poster-2024.pdf',
+  ],
+  [
+    'John Deere Time Series Analysis/TDM_Symposium2025_Poster_JohnDeere_DemandForecasting.pdf',
+    'john-deere-poster-2025.pdf',
+  ],
   ['TerraProbe/TerraProbe_MotorTest/Electronic Schematic.pdf', 'terraprobe-schematic.pdf'],
+  ['TerraProbe/CDR_ME463_TerraProbe.pdf', 'terraprobe-cdr.pdf'],
+  ['TerraProbe/FDR_ME463_TerraProbe.pdf', 'terraprobe-fdr.pdf'],
+  ['UAV Drone/Platform Team Sponsor Slides.pdf', 'offshore-platform-sponsor-slides.pdf'],
+  ['Roll_to_Roll_Mfg_Analysis/roll-to-roll-mfg-analysis.pdf', 'roll-to-roll-mfg-analysis.pdf'],
+  ['Truck Freight Analysis/truck-freight-initial.pdf', 'truck-freight-initial.pdf'],
+  ['Truck Freight Analysis/truck-freight-final.pdf', 'truck-freight-final.pdf'],
 ]
 
 /* ------------------------------------------------------------------ */
@@ -282,6 +356,11 @@ if (!only || only === 'images') {
 
   console.log(`\nProject images: ${projectImages.length}`)
   await pool(projectImages, ([rel, target]) => convertImage(join(PROJECTS, rel), target))
+
+  console.log(`\nLogos: ${logos.length}`)
+  await pool(logos, ([rel, target]) =>
+    convertImage(join(PROJECTS, 'Logos', rel), target, { trim: true, widths: LOGO_WIDTHS }),
+  )
 }
 
 if (!only || only === 'video') {

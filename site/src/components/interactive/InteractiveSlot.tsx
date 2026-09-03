@@ -30,7 +30,7 @@ class WidgetBoundary extends Component<{ children: ReactNode; label: string }, {
     if (this.state.failed) {
       return (
         <div className="border border-line bg-paper-deep px-5 py-8 text-center">
-          <p className="label">{this.props.label} — unavailable</p>
+          <p className="label">{this.props.label}, unavailable</p>
         </div>
       )
     }

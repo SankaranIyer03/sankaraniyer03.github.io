@@ -1,22 +1,38 @@
 import { motion } from 'motion/react'
-import { otherResearch, publications } from '../content/publications'
+import { publications } from '../content/publications'
 import { riseIn, staggerParent, viewportOnce } from '../lib/motion'
-import { CountUp } from './primitives/CountUp'
 import { SectionHead } from './primitives/SectionHead'
 
-export function Research() {
+interface ResearchProps {
+  index?: string
+  /** On its own page the masthead supplies the heading, so skip it here. */
+  variant?: 'section' | 'page'
+}
+
+export function Research({ index = '05', variant = 'section' }: ResearchProps) {
   return (
-    <section id="research" className="border-b border-line bg-paper-deep/40">
-      <div className="mx-auto max-w-[1600px] px-6 py-24 md:px-10 md:py-32">
-        <SectionHead
-          index="05"
-          kicker="Research & publications"
-          title="Where the modelling gets rigorous."
-          lede="Two papers: one published on interpretable hybrid machine learning for reaction kinetics, one in review on manufacturing standardization and throughput."
-        />
+    <section
+      id="research"
+      className={`border-b border-line bg-paper-deep/40 ${
+        variant === 'page' ? 'py-16 md:py-20' : ''
+      }`}
+    >
+      <div
+        className={`mx-auto max-w-[1600px] px-6 md:px-10 ${
+          variant === 'page' ? '' : 'py-24 md:py-32'
+        }`}
+      >
+        {variant === 'section' && (
+          <SectionHead
+            index={index}
+            kicker="Research & publications"
+            title="Industry & academic research."
+            lede="A published paper on hybrid reaction kinetics and a manufacturing paper in review."
+          />
+        )}
 
         <motion.div
-          className="mt-16 space-y-6"
+          className={`space-y-6 ${variant === 'page' ? '' : 'mt-16'}`}
           variants={staggerParent}
           initial="hidden"
           whileInView="show"
@@ -70,19 +86,6 @@ export function Research() {
                 <div className="p-6 md:p-8 lg:col-span-5">
                   <p className="text-[14px] leading-relaxed text-ink-soft">{pub.abstract}</p>
 
-                  {pub.results && (
-                    <dl className="mt-7 space-y-4">
-                      {pub.results.map((result) => (
-                        <div key={result.label} className="border-t border-line pt-3">
-                          <dt className="font-mono text-[1.1rem] font-medium text-ink">
-                            <CountUp value={result.value} />
-                          </dt>
-                          <dd className="mt-1 text-[12.5px] text-ink-muted">{result.label}</dd>
-                        </div>
-                      ))}
-                    </dl>
-                  )}
-
                   <ul className="mt-7 flex flex-wrap gap-1.5">
                     {pub.tags.map((tag) => (
                       <li
@@ -98,26 +101,6 @@ export function Research() {
             </motion.article>
           ))}
         </motion.div>
-
-        {/* Other research */}
-        <div className="mt-16 border-t border-line pt-10">
-          <p className="label">Also investigated</p>
-          <div className="mt-6 grid grid-cols-1 gap-x-14 gap-y-6 md:grid-cols-2">
-            {otherResearch.map((item) => (
-              <motion.div
-                key={item.title}
-                variants={riseIn}
-                initial="hidden"
-                whileInView="show"
-                viewport={viewportOnce}
-                className="border-t border-line pt-4"
-              >
-                <h4 className="text-[15px] font-medium tracking-tight">{item.title}</h4>
-                <p className="mt-2 text-[13.5px] leading-relaxed text-ink-muted">{item.detail}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
       </div>
     </section>
   )

@@ -11,6 +11,8 @@ interface FigureProps {
   imgClassName?: string
   sizes?: string
   priority?: boolean
+  /** Fill a parent of known height instead of using the source aspect. */
+  fill?: boolean
 }
 
 /**
@@ -25,6 +27,7 @@ export function Figure({
   imgClassName = '',
   sizes = '(max-width: 768px) 100vw, 50vw',
   priority = false,
+  fill = false,
 }: FigureProps) {
   const entry = getMedia(media)
   const [loaded, setLoaded] = useState(false)
@@ -43,9 +46,9 @@ export function Figure({
 
   return (
     <div
-      className={`relative overflow-hidden bg-paper-deep ${className}`}
+      className={`relative overflow-hidden bg-paper-deep ${fill ? 'h-full' : ''} ${className}`}
       style={
-        entry.aspect && !className.includes('aspect-')
+        !fill && entry.aspect && !className.includes('aspect-')
           ? { aspectRatio: String(entry.aspect) }
           : undefined
       }

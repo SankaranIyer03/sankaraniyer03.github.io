@@ -3,13 +3,13 @@ import { AnimatePresence, motion, useSpring } from 'motion/react'
 import { usePrefersReducedMotion } from '../../lib/motion'
 
 /* ===================================================================== *
- * LineSim — a discrete-event model of a nine-station low-voltage
+ * LineSim, a discrete-event model of a nine-station low-voltage
  * circuit-breaker assembly line.
  *
  * The loop is a real time-stepped DES: fixed simulation timestep driven by
  * an accumulator off requestAnimationFrame, seeded PRNG for cycle times,
  * finite inter-station buffers, and explicit blocking / starving. Nothing
- * about the bottleneck is hardcoded — it falls out of the statistics.
+ * about the bottleneck is hardcoded, it falls out of the statistics.
  * ===================================================================== */
 
 /* --------------------------------- model types ---------------------- */
@@ -18,9 +18,9 @@ interface StationSpec {
   /** Drawing callout, e.g. "ST-04". */
   readonly code: string
   readonly name: string
-  /** Operator-paced work content, in seconds. Shrinks with more labour. */
+  /** Operator-paced work content, in seconds. Shrinks with more labor. */
   readonly manual: number
-  /** Machine-paced time, in seconds. Labour cannot compress it. */
+  /** Machine-paced time, in seconds. Labor cannot compress it. */
   readonly auto: number
   /** Most operators the station can physically absorb. */
   readonly maxOps: number
@@ -102,7 +102,7 @@ const SPECS: readonly StationSpec[] = [
   { code: 'ST-04', name: 'Arc Chute Fit', manual: 30, auto: 0, maxOps: 2, changeover: 30, cv: 0.2 },
   { code: 'ST-05', name: 'Mechanism Link', manual: 42, auto: 4, maxOps: 2, changeover: 55, cv: 0.24 },
   { code: 'ST-06', name: 'Terminal Assembly', manual: 36, auto: 0, maxOps: 2, changeover: 70, cv: 0.22 },
-  // Calibration and Dielectric Test are machine-paced: extra labour cannot
+  // Calibration and Dielectric Test are machine-paced: extra labor cannot
   // compress them, which is what makes the bottleneck migrate on the slider.
   { code: 'ST-07', name: 'Calibration', manual: 10, auto: 26, maxOps: 1, changeover: 120, cv: 0.16 },
   { code: 'ST-08', name: 'Dielectric Test', manual: 5, auto: 24, maxOps: 1, changeover: 20, cv: 0.08 },
@@ -322,9 +322,9 @@ function effCycleOf(spec: StationSpec, ops: number): number {
 
 /**
  * Line balancing: every station gets a half-operator to keep the line alive,
- * then remaining labour goes greedily to whichever station is currently the
- * slowest. Machine-paced stations cap out, so extra labour eventually stops
- * helping and the bottleneck migrates — which is the point of the slider.
+ * then remaining labor goes greedily to whichever station is currently the
+ * slowest. Machine-paced stations cap out, so extra labor eventually stops
+ * helping and the bottleneck migrates, which is the point of the slider.
  */
 function allocate(operators: number): number[] {
   const slots = new Array<number>(N).fill(1)
@@ -558,7 +558,7 @@ function variantStroke(v: number): string {
   return VARIANT_SHADES[v % VARIANT_SHADES.length] as string
 }
 
-/** Spring-smoothed readout written straight to the DOM — no re-render churn. */
+/** Spring-smoothed readout written straight to the DOM, no re-render churn. */
 function SmoothNumber({
   value,
   format,
@@ -1341,7 +1341,7 @@ export function LineSim() {
             className="w-full accent-ink"
           />
           <p className="mt-1 font-mono text-[0.6875rem] leading-tight text-ink-faint">
-            Labour is re-balanced onto the slowest station each time; machine-paced stations cap out.
+            Labor is re-balanced onto the slowest station each time; machine-paced stations cap out.
           </p>
         </div>
 
@@ -1356,7 +1356,7 @@ export function LineSim() {
       {/* ---------------- caption ---------------- */}
       <p className="border-t border-line bg-paper-deep px-4 py-3 text-xs leading-relaxed text-ink-muted sm:px-6">
         Station names, cycle times and changeover penalties are a representative model of a
-        nine-station low-voltage breaker line — plausible engineering estimates chosen to make the
+        nine-station low-voltage breaker line, plausible engineering estimates chosen to make the
         line-balancing behaviour legible. They are not GE Vernova proprietary data, and the numbers
         here are not the validated figures from the study. What is real is the mechanism: a seeded
         discrete-event simulation with finite buffers, blocking, starving and variant changeovers,

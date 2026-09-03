@@ -5,7 +5,7 @@ const TICKS = 96
 
 /**
  * SVG stand-in for the 3D hero, shown while the WebGL bundle loads. Matches the
- * real scene's geometry so there is no visual jump when it swaps in — and it is
+ * real scene's geometry so there is no visual jump when it swaps in, and it is
  * a complete, correct graphic in its own right if WebGL is unavailable.
  */
 export function StaticLoop() {

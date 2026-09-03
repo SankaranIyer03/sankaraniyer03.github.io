@@ -117,5 +117,22 @@
     "height": 720,
     "aspect": 1.7778,
     "duration": 172.6
+  },
+  "rc-car/anylogic-loop": {
+    "mp4": "/video/rc-car/anylogic-loop.mp4",
+    "poster": {
+      "small": "/media/rc-car/anylogic-loop-poster-small.webp",
+      "mid": "/media/rc-car/anylogic-loop-poster-mid.webp",
+      "large": "/media/rc-car/anylogic-loop-poster-large.webp",
+      "midAvif": "/media/rc-car/anylogic-loop-poster-mid.avif",
+      "lqip": "data:image/webp;base64,UklGRj4AAABXRUJQVlA4IDIAAADQAQCdASoQAAYAA4BaJaQAAujfaruXgAD+8i7jLO5Mbj6ppXYRDvcNrSEUHJETfL4AAA==",
+      "width": 1794,
+      "height": 720,
+      "aspect": 2.4917
+    },
+    "width": 1794,
+    "height": 720,
+    "aspect": 2.4917,
+    "duration": 10.7
   }
 }

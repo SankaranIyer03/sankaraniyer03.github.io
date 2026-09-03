@@ -45,7 +45,7 @@ export const mae = (actual: number[], pred: number[]): number => {
   return s / n
 }
 
-/** Signed mean error — positive means the model over-predicts. */
+/** Signed mean error, positive means the model over-predicts. */
 export const bias = (actual: number[], pred: number[]): number => {
   const n = Math.min(actual.length, pred.length)
   if (!n) return 0

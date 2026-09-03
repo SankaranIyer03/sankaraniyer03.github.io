@@ -34,7 +34,7 @@ interface Params {
 
 type ParamKey = keyof Params
 
-/** Centre point of the experiment — the qualified baseline recipe. */
+/** Centre point of the experiment, the qualified baseline recipe. */
 const BASELINE: Params = {
   layerHeight: 0.2,
   nozzleTemp: 215,
@@ -91,7 +91,7 @@ const FACTORS: readonly FactorSpec[] = [
     max: 90,
     step: 1,
     decimals: 0,
-    hint: 'Extrusion consistency — mostly inflates spread',
+    hint: 'Extrusion consistency, mostly inflates spread',
   },
   {
     key: 'perimeters',
@@ -359,7 +359,7 @@ function fPValue(f: number, df1: number, df2: number): number {
 }
 
 /* ------------------------------------------------------------------ *
- * Factor effects — derived from the same coefficients the sim uses
+ * Factor effects, derived from the same coefficients the sim uses
  * ------------------------------------------------------------------ */
 
 /** Pure-error mean square of the replicated centre points, in mm². */
@@ -1054,7 +1054,7 @@ export function SPCChart() {
       <header className="bp-grid border-b border-line px-4 py-4 sm:px-6 sm:py-5">
         <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-3">
           <div className="min-w-0">
-            <p className="label">Fig. 04 — Process capability lab</p>
+            <p className="label">Fig. 04, Process capability lab</p>
             <h2 className="mt-1.5 text-lg leading-tight text-ink sm:text-xl">
               Bearing bore diameter, FDM axle holder
             </h2>
@@ -1139,7 +1139,7 @@ export function SPCChart() {
           </Panel>
 
           <Panel
-            title="Factor effects — ANOVA"
+            title="Factor effects, ANOVA"
             meta={`2⁵ screening · df error = ${DF_ERROR}`}
           >
             <p className="mb-3 max-w-2xl text-sm leading-relaxed text-ink-muted">
@@ -1201,7 +1201,7 @@ export function SPCChart() {
                   </span>
                   <span className="flex shrink-0 items-baseline gap-3 font-mono text-[0.6875rem] tabular-nums text-ink-faint">
                     <span>{residualShare.toFixed(1)} %</span>
-                    <span className="w-[5.5rem] text-right">—</span>
+                    <span className="w-[5.5rem] text-right">, </span>
                   </span>
                 </div>
                 <svg
@@ -1333,7 +1333,7 @@ export function SPCChart() {
                 {cap.cpk >= 1.33
                   ? 'capable'
                   : cap.cpk >= 1.0
-                    ? 'marginal — tighten or re-centre'
+                    ? 'marginal, tighten or re-centre'
                     : 'not capable'}
               </span>
             </div>
@@ -1351,7 +1351,7 @@ export function SPCChart() {
           <span className="label mr-2 align-baseline">Note</span>
           This is an <strong className="font-medium text-ink-soft">interactive model of the
           experimentally-identified relationships</strong> between print parameters and bore
-          variation — not a replay of the raw measured data. Parts are drawn from a seeded
+          variation, not a replay of the raw measured data. Parts are drawn from a seeded
           pseudo-random generator using the mean-shift and variance coefficients that the DOE and
           ANOVA produced (plus a small thermal warm-up trend over the first few parts), so the
           direction and relative size of each effect are real while the individual points are

@@ -8,7 +8,7 @@ import { usePrefersReducedMotion } from '../../lib/motion'
  *
  * Gauges the bearing bore of an FDM-printed RC-car axle holder against
  * 8.00 ±0.10 mm and stamps a pass/fail verdict. Parts are drawn
- * procedurally as edge maps — there is no camera and no captured imagery.
+ * procedurally as edge maps, there is no camera and no captured imagery.
  * ------------------------------------------------------------------------- */
 
 /* ---- Specification ------------------------------------------------------ */
@@ -396,7 +396,7 @@ export function VisionOverlay() {
     return () => observer.disconnect()
   }, [])
 
-  /* Reduced motion: no conveyor, no sweep — one finished inspection, advanced by hand. */
+  /* Reduced motion: no conveyor, no sweep, one finished inspection, advanced by hand. */
   useEffect(() => {
     if (!reduced) return
     const run = runRef.current
@@ -496,7 +496,7 @@ export function VisionOverlay() {
   const overlayFill = alarm ? 'fill-signal' : 'fill-ink'
 
   const feedLabel = measured
-    ? `Simulated inspection of part ${seq}: bore diameter measured ${current.diameter.toFixed(2)} millimetres against a nominal 8.00 plus or minus 0.10 millimetres — ${
+    ? `Simulated inspection of part ${seq}: bore diameter measured ${current.diameter.toFixed(2)} millimetres against a nominal 8.00 plus or minus 0.10 millimetres, ${
         current.verdict === 'pass' ? 'pass, in tolerance' : `fail, ${current.reason}`
       }. The part is drawn procedurally as an edge map, not photographed.`
     : `Simulated inspection of part ${seq} in progress: ${STAGES[stage].name}. The part is drawn procedurally as an edge map, not photographed.`
@@ -510,7 +510,7 @@ export function VisionOverlay() {
     { label: 'Rejected', value: String(rejected).padStart(3, '0') },
     {
       label: 'Yield',
-      value: inspected > 0 ? `${((passed / inspected) * 100).toFixed(1)}%` : '\u2014',
+      value: inspected > 0 ? `${((passed / inspected) * 100).toFixed(1)}%` : '–',
     },
   ]
 
@@ -584,7 +584,7 @@ export function VisionOverlay() {
                 </g>
 
                 <g transform={`translate(${CX} ${CY})`}>
-                  {/* 02 — raw edge points along the bore circumference */}
+                  {/* 02, raw edge points along the bore circumference */}
                   {stage >= I_CONTOUR && (
                     <g key={`contour-${seq}`}>
                       {EDGE_ANGLES.map((a, i) => {
@@ -609,7 +609,7 @@ export function VisionOverlay() {
                     </g>
                   )}
 
-                  {/* 03 — fitted circle and centre crosshairs */}
+                  {/* 03, fitted circle and centre crosshairs */}
                   {stage >= I_FIT && (
                     <motion.g
                       key={`fit-${seq}`}
@@ -627,7 +627,7 @@ export function VisionOverlay() {
                     </motion.g>
                   )}
 
-                  {/* 04 — diameter callout */}
+                  {/* 04, diameter callout */}
                   {stage >= I_MEASURE && (
                     <motion.g
                       key={`dim-${seq}`}
@@ -656,7 +656,7 @@ export function VisionOverlay() {
                     </motion.g>
                   )}
 
-                  {/* 05 — verdict stamp */}
+                  {/* 05, verdict stamp */}
                   {stage >= I_VERDICT && (
                     <g key={`stamp-${seq}`} transform="rotate(-3.5 36 -46)">
                       <motion.g
@@ -692,7 +692,7 @@ export function VisionOverlay() {
                 </g>
               </g>
 
-              {/* 01 — ROI sweep */}
+              {/* 01, ROI sweep */}
               <g clipPath={`url(#${roiClip})`}>
                 <g ref={scanRef} style={{ opacity: 0 }}>
                   <rect
@@ -781,8 +781,8 @@ export function VisionOverlay() {
                 ['Nominal', `${NOMINAL_MM.toFixed(2)} mm`, false],
                 ['Upper limit', USL_MM.toFixed(2), false],
                 ['Lower limit', LSL_MM.toFixed(2), false],
-                ['Measured', measured ? current.diameter.toFixed(2) : '\u2014\u2014\u2014', alarm],
-                ['Deviation', measured ? signed(current.deviation) : '\u2014\u2014\u2014', alarm],
+                ['Measured', measured ? current.diameter.toFixed(2) : '–', alarm],
+                ['Deviation', measured ? signed(current.deviation) : '–', alarm],
               ] as readonly [string, string, boolean][]
             ).map(([label, value, hot]) => (
               <div
@@ -824,8 +824,8 @@ export function VisionOverlay() {
               {current.reason === 'in-tolerance'
                 ? 'Bore within \u00b10.10 mm of nominal.'
                 : current.reason === 'undersize'
-                  ? 'Bore below lower limit \u2014 bearing will not seat.'
-                  : 'Bore above upper limit \u2014 bearing press-fit lost.'}
+                  ? 'Bore below lower limit, bearing will not seat.'
+                  : 'Bore above upper limit, bearing press-fit lost.'}
             </p>
           )}
         </div>

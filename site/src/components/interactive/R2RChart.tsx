@@ -107,7 +107,7 @@ function simulate(): Truth {
 }
 
 /* ------------------------------------------------------------------ *
- * Model A — unconstrained polynomial
+ * Model A, unconstrained polynomial
  * ------------------------------------------------------------------ */
 
 /** Centres and scales x onto [−1, 1] across the training window. */
@@ -131,7 +131,7 @@ function fitPolynomial(truth: Truth, degree: number): PolyFit {
 }
 
 /* ------------------------------------------------------------------ *
- * Model B — physics-informed
+ * Model B, physics-informed
  *
  * The structure is fixed by the process; only L, the gain K and the initial
  * position are free. Candidates are scanned and the best training RMSE wins.
@@ -320,8 +320,8 @@ function WebChart({ truth, poly, physics, transition, ariaLabel }: ChartProps) {
   const plotW = Math.max(10, width - m.left - m.right)
   const plotH = Math.max(10, height - m.top - m.bottom)
 
-  /* The y window is set by the physics — the truth, the samples and the
-     setpoint — never by the polynomial, which is free to leave the frame. */
+  /* The y window is set by the physics, the truth, the samples and the
+     setpoint, never by the polynomial, which is free to leave the frame. */
   const framing = [...truth.y, ...truth.sampleY, ...U, ...physics.curve].filter(Number.isFinite)
   const lo = Math.min(...framing)
   const hi = Math.max(...framing)
@@ -448,11 +448,11 @@ function WebChart({ truth, poly, physics, transition, ariaLabel }: ChartProps) {
           fontSize={8}
           letterSpacing="0.12em"
         >
-          EXTRAPOLATION — NO DATA
+          EXTRAPOLATION, NO DATA
         </text>
 
         <g clipPath={`url(#plot-${clipId})`}>
-          {/* Commanded setpoint u(x) — a known input, not a prediction */}
+          {/* Commanded setpoint u(x), a known input, not a prediction */}
           <path
             d={setpointPath}
             fill="none"
@@ -472,7 +472,7 @@ function WebChart({ truth, poly, physics, transition, ariaLabel }: ChartProps) {
             vectorEffect="non-scaling-stroke"
           />
 
-          {/* Model A — unconstrained polynomial */}
+          {/* Model A, unconstrained polynomial */}
           <motion.path
             initial={false}
             animate={{ d: buildPath(polyPoints) }}
@@ -484,7 +484,7 @@ function WebChart({ truth, poly, physics, transition, ariaLabel }: ChartProps) {
             vectorEffect="non-scaling-stroke"
           />
 
-          {/* Model B — physics-informed */}
+          {/* Model B, physics-informed */}
           <path
             d={physicsPath}
             fill="none"
@@ -653,7 +653,7 @@ export function R2RChart() {
       <header className="bp-grid border-b border-line px-4 py-4 sm:px-6 sm:py-5">
         <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-3">
           <div className="min-w-0">
-            <p className="label">Fig. 06 — Extrapolation test</p>
+            <p className="label">Fig. 06, Extrapolation test</p>
             <h2 className="mt-1.5 text-lg leading-tight text-ink sm:text-xl">
               Lateral web position in a roll-to-roll line
             </h2>
@@ -741,7 +741,7 @@ export function R2RChart() {
                   <line x1={0} x2={20} y1={5} y2={5} stroke={POLY_COLOUR} strokeWidth={1.5} />
                 </svg>
                 <span className="label normal-case tracking-normal text-ink-muted">
-                  model A — polynomial
+                  model A, polynomial
                 </span>
               </li>
               <li className="flex items-center gap-2">
@@ -756,7 +756,7 @@ export function R2RChart() {
                   />
                 </svg>
                 <span className="label normal-case tracking-normal text-ink-muted">
-                  model B — physics-informed
+                  model B, physics-informed
                 </span>
               </li>
             </ul>
@@ -829,7 +829,7 @@ export function R2RChart() {
               </div>
               <p className="mt-2 text-[0.6875rem] leading-relaxed text-ink-muted">
                 That first number is the part a curve fit cannot give you. L̂ is the
-                characteristic length over which the web absorbs a guide correction — a
+                characteristic length over which the web absorbs a guide correction, a
                 quantity with units, a physical meaning, and a value you can hand to a
                 controls engineer. The polynomial has{' '}
                 <span className="font-mono">{degree + 1}</span> coefficients and not one of
@@ -841,7 +841,7 @@ export function R2RChart() {
 
         {/* Right column */}
         <div className="grid min-w-0 auto-rows-min gap-px bg-line">
-          <Panel title="Model A — polynomial order" meta={`degree ${degree}`}>
+          <Panel title="Model A, polynomial order" meta={`degree ${degree}`}>
             <div className="grid gap-1.5">
               <div className="flex items-baseline justify-between gap-3">
                 <label htmlFor={`${idBase}-degree`} className="label truncate text-ink-soft">
@@ -927,9 +927,9 @@ export function R2RChart() {
               also uses the commanded setpoint{' '}
               <span className="font-mono">u(x)</span>, which is a{' '}
               <strong className="font-medium text-ink-soft">known input</strong> on a real
-              line rather than something inferred — part of what buying into the physics
+              line rather than something inferred, part of what buying into the physics
               actually gets you. With two free parameters it cannot chase noise, so at high
-              polynomial orders it concedes a little in-sample R² — and stays admissible
+              polynomial orders it concedes a little in-sample R², and stays admissible
               everywhere.
             </p>
             <p className="mt-2.5 text-[0.75rem] leading-relaxed text-ink-muted">
@@ -949,7 +949,7 @@ export function R2RChart() {
           <strong className="font-medium text-ink-soft">
             simulation of web-handling dynamics
           </strong>{' '}
-          computed live in the browser — a first-order lateral relaxation ODE integrated
+          computed live in the browser, a first-order lateral relaxation ODE integrated
           against a synthetic guide setpoint, with seeded process disturbance and
           measurement noise. It is{' '}
           <strong className="font-medium text-ink-soft">
