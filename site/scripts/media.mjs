@@ -293,25 +293,9 @@ const models = [
   // triangle model as R4_Assembly, so it renders identically.
 ]
 
-const docs = [
-  ['RC Car/RC_Car_Simulation_Modeling_Paper.pdf', 'rc-car-simulation-paper.pdf'],
-  ['ParkVue/parkVue_PitchDeck.pdf', 'parkvue-pitch-deck.pdf'],
-  [
-    'John Deere Time Series Analysis/TDM_Symposium2024_Poster_JohnDeere_PartsDemandForecasting.pdf',
-    'john-deere-poster-2024.pdf',
-  ],
-  [
-    'John Deere Time Series Analysis/TDM_Symposium2025_Poster_JohnDeere_DemandForecasting.pdf',
-    'john-deere-poster-2025.pdf',
-  ],
-  ['TerraProbe/TerraProbe_MotorTest/Electronic Schematic.pdf', 'terraprobe-schematic.pdf'],
-  ['TerraProbe/CDR_ME463_TerraProbe.pdf', 'terraprobe-cdr.pdf'],
-  ['TerraProbe/FDR_ME463_TerraProbe.pdf', 'terraprobe-fdr.pdf'],
-  ['UAV Drone/Platform Team Sponsor Slides.pdf', 'offshore-platform-sponsor-slides.pdf'],
-  ['Roll_to_Roll_Mfg_Analysis/roll-to-roll-mfg-analysis.pdf', 'roll-to-roll-mfg-analysis.pdf'],
-  ['Truck Freight Analysis/truck-freight-initial.pdf', 'truck-freight-initial.pdf'],
-  ['Truck Freight Analysis/truck-freight-final.pdf', 'truck-freight-final.pdf'],
-]
+/* Original PDFs stay in Portfolio Projects/. Do not copy them into
+   public/docs. Visitors view raster slides on the page; they do not
+   get a downloadable file. */
 
 /* ------------------------------------------------------------------ */
 /* Drive                                                               */
@@ -378,9 +362,6 @@ if (!only || only === 'static') {
 
   console.log(`\nCAD models: ${models.length}`)
   await pool(models, ([rel, name]) => copyFile(join(PROJECTS, rel), join(MODEL_OUT, name)))
-
-  console.log(`\nDocuments: ${docs.length}`)
-  await pool(docs, ([rel, name]) => copyFile(join(PROJECTS, rel), join(DOC_OUT, name)))
 }
 
 /* Manifests are merged so a partial run doesn't wipe the other half. */
