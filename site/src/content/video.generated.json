@@ -1,0 +1,138 @@
+{
+  "offshore-drone/clamp": {
+    "mp4": "/video/offshore-drone/clamp.mp4",
+    "poster": {
+      "small": "/media/offshore-drone/clamp-poster-small.webp",
+      "mid": "/media/offshore-drone/clamp-poster-mid.webp",
+      "large": "/media/offshore-drone/clamp-poster-large.webp",
+      "midAvif": "/media/offshore-drone/clamp-poster-mid.avif",
+      "lqip": "data:image/webp;base64,UklGRpIAAABXRUJQVlA4IIYAAAAQBACdASoQABwAPu1iqU2ppaOiMAgBMB2JZwC7AdwAocbrXuwXRLMKkAD+5z6gqkxLeoWYKuisC1MlY5qaQnwZrCYt8gcxYAyBx/9NtYz4MkjcO/HCagyDwpvyevYYBy9jeBn2NIX6ydwIxkvFUDjYdvRGu4B9bYUAPMk3tUPGlRa8yCwAAA==",
+      "width": 404,
+      "height": 718,
+      "aspect": 0.5627
+    },
+    "width": 404,
+    "height": 718,
+    "aspect": 0.5627,
+    "duration": 6.2
+  },
+  "offshore-drone/platform-motion": {
+    "mp4": "/video/offshore-drone/platform-motion.mp4",
+    "poster": {
+      "small": "/media/offshore-drone/platform-motion-poster-small.webp",
+      "mid": "/media/offshore-drone/platform-motion-poster-mid.webp",
+      "large": "/media/offshore-drone/platform-motion-poster-large.webp",
+      "midAvif": "/media/offshore-drone/platform-motion-poster-mid.avif",
+      "lqip": "data:image/webp;base64,UklGRrIAAABXRUJQVlA4IKYAAABwBACdASoQABwAPu1iqU2ppaQiMAgBMB2JYwC7Ba0BqzHxWntkYwxkxXvOLAD+3t+EPBMAorOnhTTRAPGZ2rZKn5dP2MlDFiFRGBTaT9VVN2+piTViRINN61SKmqdHpoE6Ketv0LThb9wVLcE9pctWemRi//t8js414M7b4aesJd2++S2GXgvrfLBszDur0Ci6udFmP5RcKQA6gCWn7f/74HswyAAA",
+      "width": 400,
+      "height": 710,
+      "aspect": 0.5634
+    },
+    "width": 400,
+    "height": 710,
+    "aspect": 0.5634,
+    "duration": 17.6
+  },
+  "terraprobe/sampling": {
+    "mp4": "/video/terraprobe/sampling.mp4",
+    "poster": {
+      "small": "/media/terraprobe/sampling-poster-small.webp",
+      "mid": "/media/terraprobe/sampling-poster-mid.webp",
+      "large": "/media/terraprobe/sampling-poster-large.webp",
+      "midAvif": "/media/terraprobe/sampling-poster-mid.avif",
+      "lqip": "data:image/webp;base64,UklGRmIAAABXRUJQVlA4IFYAAACQAQCdASoQAAkAA4BaJZQAAhu3DoAA/vfbgh9wNY+OWzKovGznaqPrT/Fx4ZJ01UoELf/OvQ0ycuNBWdZq0Ms/Y/03F9PaP++SDUShJS6BT6v8gMUAAA==",
+      "width": 1280,
+      "height": 720,
+      "aspect": 1.7778
+    },
+    "width": 1280,
+    "height": 720,
+    "aspect": 1.7778,
+    "duration": 12.1
+  },
+  "offshore-drone/test-1": {
+    "mp4": "/video/offshore-drone/test-1.mp4",
+    "poster": {
+      "small": "/media/offshore-drone/test-1-poster-small.webp",
+      "mid": "/media/offshore-drone/test-1-poster-mid.webp",
+      "large": "/media/offshore-drone/test-1-poster-large.webp",
+      "midAvif": "/media/offshore-drone/test-1-poster-mid.avif",
+      "lqip": "data:image/webp;base64,UklGRlwAAABXRUJQVlA4IFAAAADQAQCdASoQAAkAA4BaJQBOgCLTWU3zAADOMhzs0rAfbx/vVs6etmKrpVgynOTNV9lRsT/Aca75/ZE/TEExibO57SRrVio7DY7LSrx2F4AAAA==",
+      "width": 848,
+      "height": 478,
+      "aspect": 1.7741
+    },
+    "width": 848,
+    "height": 478,
+    "aspect": 1.7741,
+    "duration": 17
+  },
+  "offshore-drone/test-2": {
+    "mp4": "/video/offshore-drone/test-2.mp4",
+    "poster": {
+      "small": "/media/offshore-drone/test-2-poster-small.webp",
+      "mid": "/media/offshore-drone/test-2-poster-mid.webp",
+      "large": "/media/offshore-drone/test-2-poster-large.webp",
+      "midAvif": "/media/offshore-drone/test-2-poster-mid.avif",
+      "lqip": "data:image/webp;base64,UklGRmAAAABXRUJQVlA4IFQAAADQAQCdASoQAAkAA4BaJQBOgB96ysjWAAD8EiSPc9HThK5/LeaE4DBJ8f+nKz4j2yxgSZbE5mKDRh97jVWz5UiRoW/cAouqXckjCd3COA3TuMhAAAA=",
+      "width": 848,
+      "height": 478,
+      "aspect": 1.7741
+    },
+    "width": 848,
+    "height": 478,
+    "aspect": 1.7741,
+    "duration": 15.8
+  },
+  "offshore-drone/full-demo": {
+    "mp4": "/video/offshore-drone/full-demo.mp4",
+    "poster": {
+      "small": "/media/offshore-drone/full-demo-poster-small.webp",
+      "mid": "/media/offshore-drone/full-demo-poster-mid.webp",
+      "large": "/media/offshore-drone/full-demo-poster-large.webp",
+      "midAvif": "/media/offshore-drone/full-demo-poster-mid.avif",
+      "lqip": "data:image/webp;base64,UklGRloAAABXRUJQVlA4IE4AAADQAQCdASoQAAkAA4BaJQBOgCLu3r8/AAD5E8yrgBF2bx/4mf9uhKfGRBOfm8Z0Ot5R+NKK3Nh19M8ReKrdWOiMz+cnKMhv3MI/Pe0LPAA=",
+      "width": 1280,
+      "height": 720,
+      "aspect": 1.7778
+    },
+    "width": 1280,
+    "height": 720,
+    "aspect": 1.7778,
+    "duration": 39.1
+  },
+  "terraprobe/full-demo": {
+    "mp4": "/video/terraprobe/full-demo.mp4",
+    "poster": {
+      "small": "/media/terraprobe/full-demo-poster-small.webp",
+      "mid": "/media/terraprobe/full-demo-poster-mid.webp",
+      "large": "/media/terraprobe/full-demo-poster-large.webp",
+      "midAvif": "/media/terraprobe/full-demo-poster-mid.avif",
+      "lqip": "data:image/webp;base64,UklGRmIAAABXRUJQVlA4IFYAAADwAQCdASoQAAkAA4BaJZQC7AYvXP1WQwAA/vfVsn5YxkBNOO3KhlhO8KHE/tZcrSZRseDyc256fyzNLCX227M4VC4QWPpoDj7DSfceBm20BTwpIDiAAA==",
+      "width": 1280,
+      "height": 720,
+      "aspect": 1.7778
+    },
+    "width": 1280,
+    "height": 720,
+    "aspect": 1.7778,
+    "duration": 172.6
+  },
+  "rc-car/anylogic-loop": {
+    "mp4": "/video/rc-car/anylogic-loop.mp4",
+    "poster": {
+      "small": "/media/rc-car/anylogic-loop-poster-small.webp",
+      "mid": "/media/rc-car/anylogic-loop-poster-mid.webp",
+      "large": "/media/rc-car/anylogic-loop-poster-large.webp",
+      "midAvif": "/media/rc-car/anylogic-loop-poster-mid.avif",
+      "lqip": "data:image/webp;base64,UklGRj4AAABXRUJQVlA4IDIAAADQAQCdASoQAAYAA4BaJaQAAujfaruXgAD+8i7jLO5Mbj6ppXYRDvcNrSEUHJETfL4AAA==",
+      "width": 1794,
+      "height": 720,
+      "aspect": 2.4917
+    },
+    "width": 1794,
+    "height": 720,
+    "aspect": 2.4917,
+    "duration": 10.7
+  }
+}
