@@ -1,9 +1,10 @@
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { Link, Navigate, useParams } from "react-router-dom";
 import { motion } from "motion/react";
 import {
   projects,
   projectBySlug,
+  type Doc,
   type MediaItem,
   type ModelItem,
 } from "../content/projects";
@@ -115,13 +116,65 @@ function Model({ item }: { item: ModelItem }) {
   );
 }
 
-const DOC_KIND: Record<string, string> = {
-  paper: "Paper",
-  deck: "Deck",
-  schematic: "Schematic",
-  code: "Code",
-  poster: "Poster",
-};
+function PosterCard({ doc }: { doc: Doc }) {
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    if (!open) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = prev;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
+
+  return (
+    <>
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        className="group reg-marks relative block w-full cursor-zoom-in border border-line bg-card text-left transition-colors hover:border-ink"
+      >
+        <img
+          src={doc.preview}
+          alt={doc.label}
+          draggable={false}
+          onContextMenu={(e) => e.preventDefault()}
+          className="aspect-[3/2] w-full object-contain bg-paper-deep"
+        />
+        <span className="flex items-center justify-between gap-3 border-t border-line px-3 py-2.5">
+          <span className="block text-[13.5px] font-medium">{doc.label}</span>
+          <span className="label shrink-0 transition-colors group-hover:text-signal">
+            View
+          </span>
+        </span>
+      </button>
+      {open && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label={doc.label}
+          className="fixed inset-0 z-[80] overflow-auto bg-ink/75 p-3 md:p-8 lg:p-12"
+          onClick={() => setOpen(false)}
+        >
+          <img
+            src={doc.preview}
+            alt={doc.label}
+            draggable={false}
+            onContextMenu={(e) => e.preventDefault()}
+            onClick={(e) => e.stopPropagation()}
+            className="mx-auto block w-full max-w-5xl"
+          />
+        </div>
+      )}
+    </>
+  );
+}
 
 export default function ProjectPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -148,19 +201,7 @@ export default function ProjectPage() {
   const embeddedDecks = (project.docs ?? []).filter(
     (doc) => doc.slides && doc.slides.length > 0,
   );
-  const posterDocs = (project.docs ?? []).filter(
-    (doc) => doc.preview && doc.href,
-  );
-  const otherDocs = (project.docs ?? []).filter(
-    (doc) =>
-      !doc.slides?.length &&
-      !doc.preview &&
-      doc.download !== false &&
-      doc.href,
-  );
-  const decksDownloadable = embeddedDecks.some(
-    (doc) => doc.download !== false && doc.href,
-  );
+  const posterDocs = (project.docs ?? []).filter((doc) => doc.preview);
   /* A project can nominate a wide item as its opener; otherwise the card image
      leads. Problem-first pages skip the hero so the inspection photo comes first. */
   const hero = problemFirst
@@ -592,19 +633,15 @@ export default function ProjectPage() {
                 <span className="label label-signal">Sponsor slides</span>
               </div>
               <p className="mt-4 max-w-2xl text-[15px] leading-relaxed text-ink-muted">
-                {decksDownloadable
-                  ? "Step through the deck, or download the PDF."
-                  : "Step through the overview."}
+                Step through the overview.
               </p>
               <div className="mt-8 flex flex-col gap-10">
                 {embeddedDecks.map((doc) => (
                   <DeckViewer
-                    key={doc.href ?? doc.label}
+                    key={doc.label}
                     label={doc.label}
-                    href={doc.href}
                     slides={doc.slides ?? []}
-                    size={doc.size}
-                    download={doc.download}
+                    kind={doc.kind}
                   />
                 ))}
               </div>
@@ -738,7 +775,7 @@ export default function ProjectPage() {
                 <p className="mt-4 max-w-2xl text-[15px] leading-relaxed text-ink-muted">
                   Symposium posters from 2024 and 2025. Twelve Purdue
                   graduate and undergraduate students built the models. I
-                  led the partnership. Click a poster to download it.
+                  led the partnership. Click a poster to view it.
                 </p>
               )}
 
@@ -773,33 +810,7 @@ export default function ProjectPage() {
               {posterDocs.length > 0 && (
                 <div className="mx-auto mt-8 grid max-w-3xl grid-cols-1 gap-4 sm:grid-cols-2">
                   {posterDocs.map((doc) => (
-                    <a
-                      key={doc.href}
-                      href={doc.href}
-                      download
-                      className="group reg-marks relative block border border-line bg-card transition-colors hover:border-ink"
-                    >
-                      <img
-                        src={doc.preview}
-                        alt={doc.label}
-                        className="aspect-[3/2] w-full object-contain bg-paper-deep"
-                      />
-                      <span className="flex items-center justify-between gap-3 border-t border-line px-3 py-2.5">
-                        <span>
-                          <span className="block text-[13.5px] font-medium">
-                            {doc.label}
-                          </span>
-                          {doc.size && (
-                            <span className="label mt-0.5 block tnum">
-                              {doc.size}
-                            </span>
-                          )}
-                        </span>
-                        <span className="label shrink-0 transition-colors group-hover:text-signal">
-                          Download ↓
-                        </span>
-                      </span>
-                    </a>
+                    <PosterCard key={doc.label} doc={doc} />
                   ))}
                 </div>
               )}
@@ -822,61 +833,14 @@ export default function ProjectPage() {
                 >
                   {embeddedDecks.map((doc) => (
                     <DeckViewer
-                      key={doc.href ?? doc.label}
+                      key={doc.label}
                       label={doc.label}
-                      href={doc.href}
                       slides={doc.slides ?? []}
-                      size={doc.size}
-                      download={doc.download}
+                      kind={doc.kind}
                     />
                   ))}
                 </div>
               )}
-            </div>
-          </section>
-        )}
-
-        {/* ---------------- Downloads ---------------- */}
-        {otherDocs.length > 0 && (
-          <section className="border-b border-line py-14">
-            <div className="mx-auto max-w-[1600px] px-6 md:px-10">
-              <div className="flex items-center gap-4">
-                <span className="label tnum">07</span>
-                <span className="h-px w-12 bg-line-strong" />
-                <span className="label label-signal">Go deeper</span>
-              </div>
-
-              <ul className="mt-7 flex flex-col">
-                {otherDocs.map((doc) => (
-                  <li
-                    key={doc.href ?? doc.label}
-                    className="border-t border-line last:border-b"
-                  >
-                    <a
-                      href={doc.href}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="group flex flex-wrap items-center gap-x-6 gap-y-1 py-4 transition-colors hover:text-signal"
-                    >
-                      <span className="label w-24 shrink-0">
-                        {DOC_KIND[doc.kind] ?? doc.kind}
-                      </span>
-                      <span className="flex-1 text-[15.5px] font-medium">
-                        {doc.label}
-                      </span>
-                      {doc.size && (
-                        <span className="label tnum">{doc.size}</span>
-                      )}
-                      <span
-                        aria-hidden="true"
-                        className="transition-transform duration-300 group-hover:translate-x-1"
-                      >
-                        ↓
-                      </span>
-                    </a>
-                  </li>
-                ))}
-              </ul>
             </div>
           </section>
         )}

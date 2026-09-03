@@ -8,8 +8,7 @@ import type { ActId } from './acts'
  *   Page fields  (problem, did, outcome, media, docs) are the payoff for
  *                someone who clicked through.
  *
- * Papers stay linked. Decks can be inlined as a scrollable viewer. A
- * download is optional, some sponsor decks stay on-page only.
+ * Papers and decks are viewed on the page. PDFs are not offered as downloads.
  */
 
 export type InteractiveId =
@@ -41,15 +40,10 @@ export interface ModelItem {
 
 export interface Doc {
   label: string
-  href?: string
   kind: 'paper' | 'deck' | 'schematic' | 'code' | 'poster'
-  /** Rough size, so a click on mobile data isn't a surprise. */
-  size?: string
-  /** In-page slide images, the deck can be scrolled here, not only downloaded. */
+  /** In-page slide images. The document is viewed here, not downloaded. */
   slides?: string[]
-  /** False keeps the deck on-page only, no PDF. Default true when href is set. */
-  download?: boolean
-  /** Small preview image for a downloadable poster. */
+  /** Preview image for a poster viewed on the page. */
   preview?: string
 }
 
@@ -226,9 +220,7 @@ export const projects: Project[] = [
     docs: [
       {
         label: 'Design Review',
-        href: '/docs/rc-car-design-review.pdf',
         kind: 'deck',
-        size: '6.0 MB',
         slides: Array.from(
           { length: 28 },
           (_, i) => `/docs/rc-car-design-review/${String(i + 1).padStart(2, '0')}.webp`,
@@ -236,9 +228,7 @@ export const projects: Project[] = [
       },
       {
         label: 'Manufacturing Review',
-        href: '/docs/rc-car-manufacturing-review.pdf',
         kind: 'deck',
-        size: '15 MB',
         slides: Array.from(
           { length: 47 },
           (_, i) => `/docs/rc-car-manufacturing-review/${String(i + 1).padStart(2, '0')}.webp`,
@@ -349,9 +339,7 @@ export const projects: Project[] = [
     docs: [
       {
         label: 'AnyLogic Simulation',
-        href: '/docs/rc-car-anylogic-simulation.pdf',
         kind: 'deck',
-        size: '5.7 MB',
         slides: Array.from(
           { length: 36 },
           (_, i) => `/docs/rc-car-anylogic-simulation/${String(i + 1).padStart(2, '0')}.webp`,
@@ -359,9 +347,11 @@ export const projects: Project[] = [
       },
       {
         label: 'Simulation modelling paper',
-        href: '/docs/rc-car-simulation-paper.pdf',
         kind: 'paper',
-        size: '2.2 MB',
+        slides: Array.from(
+          { length: 10 },
+          (_, i) => `/docs/rc-car-simulation-paper/${String(i + 1).padStart(2, '0')}.webp`,
+        ),
       },
     ],
     stack: ['AnyLogic', 'Discrete-event simulation', 'Throughput analysis'],
@@ -492,9 +482,7 @@ export const projects: Project[] = [
     docs: [
       {
         label: 'Statistical Process Control',
-        href: '/docs/rc-car-spc-presentation.pdf',
         kind: 'deck',
-        size: '8.5 MB',
         slides: Array.from(
           { length: 32 },
           (_, i) => `/docs/rc-car-spc-presentation/${String(i + 2).padStart(2, '0')}.webp`,
@@ -622,9 +610,7 @@ export const projects: Project[] = [
     docs: [
       {
         label: 'Critical Design Review',
-        href: '/docs/terraprobe-cdr.pdf',
         kind: 'deck',
-        size: '8.3 MB',
         slides: Array.from(
           { length: 25 },
           (_, i) => `/docs/terraprobe-cdr/${String(i + 1).padStart(2, '0')}.webp`,
@@ -632,9 +618,7 @@ export const projects: Project[] = [
       },
       {
         label: 'Final Design Review',
-        href: '/docs/terraprobe-fdr.pdf',
         kind: 'deck',
-        size: '12 MB',
         slides: Array.from(
           { length: 33 },
           (_, i) => `/docs/terraprobe-fdr/${String(i + 1).padStart(2, '0')}.webp`,
@@ -642,9 +626,11 @@ export const projects: Project[] = [
       },
       {
         label: 'Electronic schematic',
-        href: '/docs/terraprobe-schematic.pdf',
         kind: 'schematic',
-        size: '1.1 MB',
+        slides: Array.from(
+          { length: 2 },
+          (_, i) => `/docs/terraprobe-schematic/${String(i + 1).padStart(2, '0')}.webp`,
+        ),
       },
     ],
     stack: [
@@ -728,9 +714,7 @@ export const projects: Project[] = [
     docs: [
       {
         label: 'Platform Team Sponsor Slides',
-        href: '/docs/offshore-platform-sponsor-slides.pdf',
         kind: 'deck',
-        size: '1.6 MB',
         slides: Array.from(
           { length: 10 },
           (_, i) => `/docs/offshore-slides/${String(i + 1).padStart(2, '0')}.webp`,
@@ -792,16 +776,12 @@ export const projects: Project[] = [
     docs: [
       {
         label: '2024 Symposium poster',
-        href: '/docs/john-deere-poster-2024.pdf',
         kind: 'poster',
-        size: '0.5 MB',
         preview: '/docs/john-deere-poster-2024.webp',
       },
       {
         label: '2025 Symposium poster',
-        href: '/docs/john-deere-poster-2025.pdf',
         kind: 'poster',
-        size: '1.2 MB',
         preview: '/docs/john-deere-poster-2025.webp',
       },
     ],
@@ -935,9 +915,7 @@ export const projects: Project[] = [
     docs: [
       {
         label: 'Manufacturing analysis',
-        href: '/docs/roll-to-roll-mfg-analysis.pdf',
         kind: 'deck',
-        size: '5.6 MB',
         slides: Array.from(
           { length: 41 },
           (_, i) => `/docs/roll-to-roll-mfg-analysis/${String(i + 1).padStart(2, '0')}.webp`,
@@ -1047,9 +1025,7 @@ export const projects: Project[] = [
     docs: [
       {
         label: 'Initial, EDA',
-        href: '/docs/truck-freight-initial.pdf',
         kind: 'deck',
-        size: '4.8 MB',
         slides: Array.from(
           { length: 25 },
           (_, i) => `/docs/truck-freight-initial/${String(i + 1).padStart(2, '0')}.webp`,
@@ -1057,9 +1033,7 @@ export const projects: Project[] = [
       },
       {
         label: 'Final, LightGBM & transformer',
-        href: '/docs/truck-freight-final.pdf',
         kind: 'deck',
-        size: '4.3 MB',
         slides: Array.from(
           { length: 30 },
           (_, i) => `/docs/truck-freight-final/${String(i + 1).padStart(2, '0')}.webp`,
@@ -1116,9 +1090,7 @@ export const projects: Project[] = [
     docs: [
       {
         label: 'Pitch deck',
-        href: '/docs/parkvue-pitch-deck.pdf',
         kind: 'deck',
-        size: '1.5 MB',
         slides: Array.from(
           { length: 13 },
           (_, i) => `/media/parkvue/${String(i + 1).padStart(2, '0')}-large.webp`,
