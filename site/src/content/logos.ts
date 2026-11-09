@@ -40,7 +40,7 @@ export const logoCards: LogoCard[] = [
     logo: 'logos/ge-vernova',
     kind: 'industry',
     role: 'Circuit breaker platform standardization',
-    period: '2025',
+    period: '2026',
     note: '3x drawing throughput. $33.5M early revenue a year.',
   },
   {
@@ -57,8 +57,8 @@ export const logoCards: LogoCard[] = [
     name: 'GE Aerospace',
     logo: 'logos/ge-aerospace',
     kind: 'industry',
-    role: 'Manufacturing, supply chain & data, four terms',
-    period: '2021, 2025',
+    role: 'OMLP, plus four internships',
+    period: '2021, present',
     note: '75% fewer non-conformances. Scaled to 139 sites.',
   },
   {
