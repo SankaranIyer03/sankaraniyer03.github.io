@@ -23,8 +23,8 @@ export default function Experience() {
             <span className="text-signal">GE, Rockwell, and Deloitte.</span>
           </>
         }
-        lede="Manufacturing at GE Vernova, four terms at GE Aerospace, automation consulting at Rockwell, enterprise systems at Deloitte."
-        meta={`${roles.length} roles · 2021, 2026`}
+        lede="I am on OMLP at GE Aerospace. Before that, manufacturing at GE Vernova, four internships at Aerospace, Rockwell for automation, Deloitte for enterprise systems."
+        meta={`${roles.length} roles · 2021, present`}
       />
 
       <section className="border-b border-line py-16 md:py-20">

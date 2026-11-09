@@ -85,7 +85,28 @@ function Entry({ role, open, onToggle, yearMarker }: EntryProps) {
               <h3 className="mt-1.5 text-[1.15rem] leading-tight font-medium tracking-[-0.015em] md:text-[1.3rem]">
                 {role.title}
               </h3>
-              <p className="mt-1 text-[14px] text-ink-muted">{role.company}</p>
+              <p className="mt-1 text-[14px] text-ink-muted">
+                {role.company}
+                {role.detail && (
+                  <>
+                    <span className="mx-2 text-ink-faint">·</span>
+                    {role.detail}
+                  </>
+                )}
+              </p>
+              {role.href && (
+                <a
+                  href={role.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="group mt-2 inline-flex items-center gap-2 border-b border-ink pb-0.5 font-mono text-[11px] tracking-[0.12em] uppercase transition-colors hover:border-signal hover:text-signal"
+                >
+                  About the program
+                  <span className="transition-transform duration-300 group-hover:translate-x-0.5">
+                    ↗
+                  </span>
+                </a>
+              )}
             </div>
           </div>
 
